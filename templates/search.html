@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Bar</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        p{
+            font-size: 20px;
+            color: red;
+        }
+
+        h1{
+            text-align: center;
+            margin-top: 50px;
+            font-size: 36px;
+        }
+
+        .container{
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        form{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"]{
+            font-size: 18px;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            width: 100%;
+        }
+
+        button{
+            font-size: 18px;
+            padding: 10px 25px;
+            background-color: #0077cc;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover{
+            background-color: #005fa3;
+        }
+
+        ul{
+            list-style-type: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+
+        li{
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 15px;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .stats{
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google Logo" style="vertical-align: middle;"> Search Emissions
+    </h1>
+    <div class="container">
+        <form action="/" method="POST">
+            <input type="text" name="search" placeholder="Type search here" required>
+            <button type="submit">Search</button>
+        </form>
+        <div class="stats">
+            <p>Number of searches: {{ session['results_list']|length }}</p>
+            <p>CO2 emitted from your searches: {{ (session['results_list']|length) * 0.0108171|round(2) }} kg</p>
+        </div>
+        <ul>
+            {% if session['results_list'] %}
+                {% set total_results = 0 %}
+                {% for result in session['results_list'] %}
+                    {% set total_results = total_results + result[0] %}
+                    <li>Total search results for '{{ result[1] }}': {{ result[0] }}</li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+        <form action="/clear" method="POST">
+            <button type="submit">Clear Searches</button>
+        </form>
+    </div>
+</body>
+</html>
